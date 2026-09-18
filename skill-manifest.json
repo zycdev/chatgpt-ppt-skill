@@ -25,6 +25,7 @@
       "docs/image-generation.md",
       "docs/prompting.md",
       "docs/text-repairability.md",
+      "examples/sample_slide_prompt.example.md",
       "examples/slide_prompt.example.md",
       "examples/slide_prompt_with_asset.example.md"
     ],
@@ -58,5 +59,9 @@
     "freeze_loaded_snapshot": true,
     "silent_midtask_refresh": false,
     "prefer_tag_or_commit_for_reproducibility": true
+  },
+  "optional_resources": {
+    "style_preview_gallery": "references/style-preview-gallery.md",
+    "upstream_visual_showcase": "examples/upstream-showcase.md"
   }
 }
