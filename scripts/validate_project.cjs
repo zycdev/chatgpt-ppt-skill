@@ -9,6 +9,13 @@ function die(msg) {
   process.exit(1);
 }
 
+function readPngSize(filePath) {
+  const b = fs.readFileSync(filePath);
+  const sig = Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]);
+  if (b.length < 24 || !b.subarray(0, 8).equals(sig)) return null;
+  return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+}
+
 function main() {
   const args = process.argv.slice(2);
   const i = args.indexOf('--project');
@@ -56,7 +63,25 @@ function main() {
     if (!slide) errors.push(`Missing state entry for slide ${n}`);
     else if (slide.status !== 'accepted') errors.push(`Slide ${n} status is ${slide.status}, not accepted`);
 
-    if (!fs.existsSync(expected)) errors.push(`Missing final image: ${path.relative(project, expected)}`);
+    if (!fs.existsSync(expected)) {
+      errors.push(`Missing final image: ${path.relative(project, expected)}`);
+    } else {
+      const stat = fs.statSync(expected);
+      if (stat.size === 0) {
+        errors.push(`Empty final image: ${path.relative(project, expected)}`);
+      } else {
+        const size = readPngSize(expected);
+        if (!size || !size.width || !size.height) {
+          errors.push(`Invalid PNG final image: ${path.relative(project, expected)}`);
+        } else {
+          const ratio = size.width / size.height;
+          const target = 16 / 9;
+          if (Math.abs(ratio - target) > 0.02) {
+            errors.push(`Slide ${n} is not 16:9: ${size.width}x${size.height}`);
+          }
+        }
+      }
+    }
 
     const promptPath = path.join(project, 'prompts', `slide_${String(n).padStart(2, '0')}.md`);
     if (!fs.existsSync(promptPath)) warnings.push(`Missing saved prompt for slide ${n}`);
