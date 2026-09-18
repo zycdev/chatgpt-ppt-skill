@@ -87,6 +87,17 @@ Before each slide is generated, its saved prompt must contain:
 
 The image-generation step must use this locked content, not reconstruct it from vague memory.
 
+## Speaker notes are also source-grounded
+
+`speech.md` is allowed to carry nuance and detail omitted from the visual slide, but it is **not** a place to add plausible-sounding unsupported facts.
+
+For source-driven decks:
+
+- apply the same verbatim and semantic locks to speaker notes;
+- verify proper names, affiliations, quantities, dates, platform/resource claims, and causal claims against the source;
+- do not upgrade a general “cooperation basis/channel” into a named “platform”, “center”, “joint lab”, deployment, partnership, or other stronger entity unless the source explicitly supports that wording;
+- if a detail is useful but not source-supported, omit it or mark it for user confirmation.
+
 ## QA against the source
 
 For every slide, compare the rendered slide against the content lock.
