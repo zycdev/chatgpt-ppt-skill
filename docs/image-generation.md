@@ -10,6 +10,8 @@ Do not use deterministic rendering systems to create the slide artwork itself.
 
 After the representative sample is approved, use it as the single primary visual anchor for all subsequent slides.
 
+The approved sample must be **visually available to the image-generation step**, not merely mentioned by filename. If the task has resumed and the sample exists only as a project file, inspect/open that image in the current conversation/runtime before generating dependent slides.
+
 Post-sample prompts must preserve:
 
 - visual language;
