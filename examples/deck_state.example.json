@@ -1,0 +1,72 @@
+{
+  "schema_version": "0.4",
+  "skill_binding": {
+    "load_mode": "transient_github",
+    "entrypoint": "https://raw.githubusercontent.com/<owner>/<repo>/refs/tags/v0.4.0/CHATGPT.md",
+    "declared_version": "0.4.0",
+    "requested_ref": "v0.4.0",
+    "freeze_policy": "session_snapshot",
+    "loaded_at": null
+  },
+  "deck": {
+    "name": "example_deck",
+    "goal": "Explain a research project clearly and visually",
+    "audience": "expert review panel",
+    "language": "zh-CN",
+    "target_slide_count": 10,
+    "approval_mode": "interactive",
+    "status": "sample"
+  },
+  "outline": {
+    "approved": true,
+    "path": "outline.md"
+  },
+  "style": {
+    "approved": true,
+    "source_type": "built_in",
+    "source_name": "Academic Light Infographic",
+    "visual_spec_path": "visual_spec.md",
+    "text_repairability_required": true
+  },
+  "sample": {
+    "slide_number": 4,
+    "approved": false,
+    "path": null,
+    "primary_visual_anchor": false
+  },
+  "slides": {
+    "1": {
+      "title": "Title",
+      "status": "planned",
+      "path": null,
+      "prompt_path": null,
+      "notes": ""
+    },
+    "2": {
+      "title": "Context",
+      "status": "planned",
+      "path": null,
+      "prompt_path": null,
+      "notes": ""
+    },
+    "3": {
+      "title": "Research question",
+      "status": "planned",
+      "path": null,
+      "prompt_path": null,
+      "notes": ""
+    },
+    "4": {
+      "title": "Core framework",
+      "status": "planned",
+      "path": null,
+      "prompt_path": "prompts/slide_04.md",
+      "notes": "Representative sample."
+    }
+  },
+  "output": {
+    "pptx_path": null,
+    "speech_path": null,
+    "notes_embedded": false
+  }
+}
