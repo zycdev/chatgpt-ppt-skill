@@ -108,6 +108,16 @@ Regenerate for structural problems, wrong slide identity, major source/content e
 
 Respect the retry budget in `docs/image-generation.md`.
 
+## Speaker-notes QA
+
+Before assembly, review `speech.md` against the same source locks used for the slides:
+
+- slide number/title mapping is correct;
+- no unsupported institution/platform/cooperation claim was introduced;
+- names, dates, quantities, metrics, and formal terms are source-faithful;
+- notes do not contradict the rendered slide;
+- notes may add explanation, but not unsupported specificity.
+
 ## Assembly
 
 Final PPTX assembly must not alter accepted artwork.
