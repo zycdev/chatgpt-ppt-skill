@@ -18,6 +18,8 @@ Raw GitHub URLs are an acceptable fallback for public repositories.
 
 ## Bootstrap procedure
 
+If the ChatGPT platform requires an initial presentation/artifact initialization step before repository access, perform that required platform step first. Then continue this bootstrap immediately. That platform initialization does not replace this repository workflow and does not authorize skipping its approval gates.
+
 1. Read `skill-manifest.json`.
 2. Read `SKILL.md` completely.
 3. Confirm that the version in `skill-manifest.json` matches the `SKILL.md` frontmatter. If they disagree, stop and report a repository-version mismatch.
@@ -27,7 +29,7 @@ Raw GitHub URLs are an acceptable fallback for public repositories.
 7. Freeze this loaded skill snapshot for the current PPT task. Do not silently re-read a mutable GitHub branch midway through the task. Reload only when the user explicitly requests an update.
 8. If the user supplied a tag or commit ref, preserve that ref for all repository reads during this task.
 9. If the user supplied `main` or another mutable branch, resolve/record the current commit when practical and treat that snapshot as frozen for the task.
-10. Create/update `deck_state.json` with the skill binding before substantive deck production begins.
+10. Before first creating `deck_state.json`, load the manifest's `state_validation` resources. Then create/update `deck_state.json` with the skill binding before substantive deck production begins.
 
 ## Expected interaction
 
