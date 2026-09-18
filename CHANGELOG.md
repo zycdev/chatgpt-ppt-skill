@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.4.1
+
+### First cold-start dogfood hardening
+
+This release incorporates findings from the first complete ordinary-Chat cold-start run using the GitHub transient loader and a 12-slide source-grounded research-proposal deck.
+
+- Added `docs/source-grounding.md` with verbatim/semantic content locks and source anchors so formal names, research-content titles, numbers, metrics, formulas, and scope do not drift during slide compression.
+- Made saved `outline.md` generation-ready instead of allowing titles-only outlines for source-heavy decks.
+- Made `prompts/slide_XX.md` true **pre-generation execution briefs**; retrospective three-line summaries are no longer valid prompts.
+- Added a strict slide-identity guard and one-slide-per-ImageGen-call rule to reduce accidental cover-page generation and batch-prompt leakage.
+- Added explicit placeholder/invention guards for `XXX`, `TBD`, fake citations, fake institutions, unsupported numbers, and other template filler.
+- Clarified that the approved sample is a **style reference only** for later pages: inherit visual grammar, not sample text, exact layout, scenic footer, or page-specific decoration.
+- Added a default retry budget (initial attempt + up to two corrective attempts), then `needs_user_decision` instead of open-ended retry loops.
+- Added `accepted_with_waiver` semantics so known minor exceptions are not mislabeled as clean `accepted` slides.
+- Strengthened sample preflight and deck-level QA, including repeated-motif/template checks, slide identity, factual/source fidelity, and accidental page-number/footer checks.
+- Tightened text repairability for titles and colored header bands: even subtle gradients behind text fail the contract.
+- Extended `deck_state.json` with resolved commit, QA/retry policy, content-lock state, sample preflight, per-slide attempts/issues/waivers/source refs, and final validation state.
+- Strengthened `scripts/validate_project.cjs` to reject incomplete prompt stubs, placeholders, inconsistent waivers, unresolved accepted-slide issues, invalid PNGs/aspect ratios, and missing source-grounding markers.
+
 ## v0.4.0
 
 ### Chat-only transient GitHub loading
