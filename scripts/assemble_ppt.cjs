@@ -35,7 +35,7 @@ function usage() {
 }
 
 function slideNumber(filename) {
-  const m = filename.match(/^slide_(\d+)\.(png|jpe?g|webp)$/i);
+  const m = filename.match(/^slide_(\d+)\.png$/i);
   return m ? Number(m[1]) : null;
 }
 
@@ -101,9 +101,32 @@ async function main() {
 
   const images = getSlideImages(imgDir);
   const statePath = path.join(project, 'deck_state.json');
-  let deckState = null;
-  if (fs.existsSync(statePath)) {
-    try { deckState = JSON.parse(fs.readFileSync(statePath, 'utf8')); } catch (_) { /* assembly can proceed without metadata */ }
+  if (!fs.existsSync(statePath)) throw new Error(`Missing deck_state.json: ${statePath}`);
+  let deckState;
+  try {
+    deckState = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+  } catch (e) {
+    throw new Error(`Invalid deck_state.json: ${e.message}`);
+  }
+
+  const expectedCount = Number(deckState?.deck?.target_slide_count || 0);
+  if (!Number.isInteger(expectedCount) || expectedCount < 1) {
+    throw new Error('Invalid deck.target_slide_count in deck_state.json');
+  }
+  if (images.length !== expectedCount) {
+    throw new Error(`Slide-image count ${images.length} does not match target_slide_count ${expectedCount}`);
+  }
+
+  const allowed = new Set(['accepted', 'accepted_with_waiver']);
+  for (let n = 1; n <= expectedCount; n++) {
+    const stateSlide = deckState?.slides?.[String(n)];
+    if (!stateSlide || !allowed.has(stateSlide.status)) {
+      throw new Error(`Slide ${n} is not accepted for assembly`);
+    }
+    if (stateSlide.status === 'accepted_with_waiver' &&
+        (!Array.isArray(stateSlide.waivers) || stateSlide.waivers.length === 0)) {
+      throw new Error(`Slide ${n} is accepted_with_waiver but has no recorded waiver`);
+    }
   }
 
   const speechPath = path.join(project, 'speech.md');
