@@ -1,31 +1,42 @@
 # Visual Specification
 
 ## Style source
-Built-in: Academic Light Infographic
+Built-in detailed reference: `references/科研答辩风.md`
 
 ## Visual intent
-A polished research-review deck: light, modern, diagram-driven, and spacious rather than corporate-template-heavy.
+A formal but modern Chinese research-defense deck: evidence-driven, diagram-led, disciplined, and readable at review-panel distance. Avoid both commercial pitch-deck gloss and old-fashioned dense government-report styling.
 
 ## Palette
-- Background: clean white
-- Primary accents: muted blue / teal
-- Secondary accent: restrained warm orange
-- Use color mainly to encode conceptual groups, not as decoration.
+- Background: clean white / very light cool gray.
+- Structural color: deep academic blue.
+- Supporting accents: restrained research blue / pale blue.
+- Emphasis: limited warm red only for decisive conclusions, risks, or breakthrough points.
+- Use color semantically; do not decorate every module with a different color.
 
 ## Typography character
-- Clear modern sans-serif appearance.
-- Strong title/body hierarchy.
-- Avoid dense microtext.
+- Modern Chinese sans-serif appearance.
+- Strong title/body/label hierarchy.
+- Titles concise and authoritative.
+- Body copy converted into short labels, diagram annotations, or evidence callouts rather than paragraphs.
+- Avoid decorative microtext.
 
 ## Layout rhythm
-- Generous whitespace.
-- Vary composition by slide role.
-- Prefer one dominant visual idea per slide.
+- Medium information density suitable for formal research defense.
+- One dominant visual story per slide.
+- Vary composition by slide role; do not repeat one card-grid template.
+- Keep a clear left-to-right or top-to-bottom reading order.
+- Preserve enough negative space for text repairability.
 
 ## Diagram / illustration language
-- Flat or lightly dimensional scientific infographic language.
-- Consistent icon/line language across the deck.
-- No unrelated illustration style changes after sample approval.
+- Structured academic mechanism diagrams, process flows, evidence panels, simplified technical illustrations, and restrained icons.
+- Blue structural lines and arrows; red emphasis only where semantically justified.
+- Consistent line weight and icon language across the deck.
+- No generic AI robot imagery or unrelated “future technology” decoration.
+
+## Source-asset treatment
+- Paper figures, charts, screenshots, and logos marked as strict input assets must remain semantically faithful.
+- Do not redraw or alter data, axes, legends, labels, values, or factual relationships.
+- Compose the surrounding slide around the source asset.
 
 ## Text repairability
 - Every text block sits on a uniform solid-color local background.
@@ -34,14 +45,17 @@ A polished research-review deck: light, modern, diagram-driven, and spacious rat
 - Do not overuse visible cards; open white/flat space is preferred.
 
 ## Hard constraints
-- 16:9 full-slide artwork.
-- White/light visual system with high legibility.
-- Text/graphics never overlap.
+- 16:9 full-slide native ImageGen artwork.
+- Formal academic/research-defense tone.
+- Exact Chinese terminology.
+- Text and graphics never overlap.
 - Required source figures remain semantically faithful.
 - Text repairability rules apply globally.
+- After sample approval, use the approved sample as the single primary visual anchor.
 
 ## Negative constraints
-- No fake citations, fake logos, page numbers, or decorative microtext.
-- No gradient or texture behind any text.
+- No fake citations, fake institutional logos, page numbers, or decorative microtext.
+- No gradient, texture, photo, or illustration detail behind text.
 - No connector/arrows crossing text.
-- No irrelevant religious, political, or stereotypical cultural symbols unless explicitly requested by the user/content.
+- No glossy 3D icon set, neon/cyberpunk look, or generic robot hero image.
+- No repetitive equal-card dashboard as the default page composition.
