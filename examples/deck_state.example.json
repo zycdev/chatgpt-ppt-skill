@@ -1,10 +1,11 @@
 {
-  "schema_version": "0.4",
+  "schema_version": "0.4.1",
   "skill_binding": {
     "load_mode": "transient_github",
     "entrypoint": "zycdev/chatgpt-ppt-skill/CHATGPT.md",
-    "declared_version": "0.4.0",
+    "declared_version": "0.4.1",
     "requested_ref": "main",
+    "resolved_commit": "<RESOLVED_COMMIT_SHA>",
     "freeze_policy": "session_snapshot",
     "loaded_at": null
   },
@@ -15,11 +16,15 @@
     "language": "zh-CN",
     "target_slide_count": 10,
     "approval_mode": "interactive",
+    "qa_mode": "standard",
+    "max_corrective_attempts": 2,
+    "source_grounding_required": true,
     "status": "sample"
   },
   "outline": {
     "approved": true,
-    "path": "outline.md"
+    "path": "outline.md",
+    "content_lock_applied": true
   },
   "style": {
     "approved": true,
@@ -32,28 +37,50 @@
     "slide_number": 4,
     "approved": false,
     "path": null,
-    "primary_visual_anchor": false
+    "primary_visual_anchor": false,
+    "preflight_passed": false,
+    "attempt_count": 0,
+    "issues": [],
+    "waivers": []
   },
   "slides": {
     "1": {
       "title": "Title",
       "status": "planned",
       "path": null,
-      "prompt_path": null,
+      "prompt_path": "prompts/slide_01.md",
+      "attempt_count": 0,
+      "issues": [],
+      "waivers": [],
+      "source_refs": [
+        "source document: cover / project title"
+      ],
       "notes": ""
     },
     "2": {
       "title": "Context",
       "status": "planned",
       "path": null,
-      "prompt_path": null,
+      "prompt_path": "prompts/slide_02.md",
+      "attempt_count": 0,
+      "issues": [],
+      "waivers": [],
+      "source_refs": [
+        "source document: background section"
+      ],
       "notes": ""
     },
     "3": {
       "title": "Research question",
       "status": "planned",
       "path": null,
-      "prompt_path": null,
+      "prompt_path": "prompts/slide_03.md",
+      "attempt_count": 0,
+      "issues": [],
+      "waivers": [],
+      "source_refs": [
+        "source document: research objectives/questions"
+      ],
       "notes": ""
     },
     "4": {
@@ -61,12 +88,19 @@
       "status": "planned",
       "path": null,
       "prompt_path": "prompts/slide_04.md",
-      "notes": "Representative sample."
+      "attempt_count": 0,
+      "issues": [],
+      "waivers": [],
+      "source_refs": [
+        "source document: technical route"
+      ],
+      "notes": "Representative sample candidate."
     }
   },
   "output": {
     "pptx_path": null,
     "speech_path": null,
-    "notes_embedded": false
+    "notes_embedded": false,
+    "validation_passed": false
   }
 }
