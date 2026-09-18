@@ -183,9 +183,10 @@ Create `visual_spec.md` containing at least:
 - source-asset treatment;
 - **text-repairability rules**;
 - **hard constraints**;
-- **negative constraints / avoid-list**.
+- **negative constraints / avoid-list**;
+- **constraint inheritance / overrides** — retain relevant restrictions from the selected detailed style; record every intentional user-approved exception in `deck_state.json.style.constraint_overrides` instead of silently dropping it.
 
-The hard and negative constraints must be written explicitly enough to be copied into every slide-generation prompt without weakening or paraphrasing them away.
+The hard and negative constraints must be written explicitly enough to be copied into every slide-generation prompt without weakening or paraphrasing them away. The selected detailed style's explicit `avoid`/rendering restrictions remain in force unless the user explicitly overrides them and that override is recorded.
 
 Wait for visual-direction approval and record it in `deck_state.json`.
 
