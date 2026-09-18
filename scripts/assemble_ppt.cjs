@@ -100,6 +100,12 @@ async function main() {
   if (!fs.existsSync(imgDir)) throw new Error(`Missing origin_image directory: ${imgDir}`);
 
   const images = getSlideImages(imgDir);
+  const statePath = path.join(project, 'deck_state.json');
+  let deckState = null;
+  if (fs.existsSync(statePath)) {
+    try { deckState = JSON.parse(fs.readFileSync(statePath, 'utf8')); } catch (_) { /* assembly can proceed without metadata */ }
+  }
+
   const speechPath = path.join(project, 'speech.md');
   const speech = fs.existsSync(speechPath) ? fs.readFileSync(speechPath, 'utf8') : '';
   const notes = parseSpeech(speech);
@@ -124,7 +130,7 @@ async function main() {
   pptx.author = 'ChatGPT PPT Skill';
   pptx.subject = 'Image-based presentation visual draft';
   pptx.title = path.basename(output, path.extname(output));
-  pptx.lang = 'zh-CN';
+  pptx.lang = deckState?.deck?.language || 'zh-CN';
 
   for (const item of images) {
     const slide = pptx.addSlide();
