@@ -20,6 +20,7 @@ This release incorporates findings from the first complete ordinary-Chat cold-st
 - Extended `deck_state.json` with resolved commit, QA/retry policy, content-lock state, sample preflight, per-slide attempts/issues/waivers/source refs, and final validation state.
 - Strengthened `scripts/validate_project.cjs` to reject incomplete prompt stubs, placeholders, inconsistent waivers, unresolved accepted-slide issues, invalid PNGs/aspect ratios, and missing source-grounding markers.
 - Applied the same source-grounding rules to `speech.md` so speaker notes cannot introduce unsupported institutions, platforms, cooperation claims, numbers, or stronger wording than the source.
+- Added `scripts/check_skill_repo.cjs` to check manifest/SKILL/schema/example version alignment, referenced-file completeness, and helper-script syntax after repository edits.
 
 ## v0.4.0
 
