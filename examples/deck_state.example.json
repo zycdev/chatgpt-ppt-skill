@@ -2,9 +2,9 @@
   "schema_version": "0.4",
   "skill_binding": {
     "load_mode": "transient_github",
-    "entrypoint": "https://raw.githubusercontent.com/<owner>/<repo>/refs/tags/v0.4.0/CHATGPT.md",
+    "entrypoint": "zycdev/chatgpt-ppt-skill/CHATGPT.md",
     "declared_version": "0.4.0",
-    "requested_ref": "v0.4.0",
+    "requested_ref": "main",
     "freeze_policy": "session_snapshot",
     "loaded_at": null
   },
@@ -24,7 +24,7 @@
   "style": {
     "approved": true,
     "source_type": "built_in",
-    "source_name": "Academic Light Infographic",
+    "source_name": "科研答辩风",
     "visual_spec_path": "visual_spec.md",
     "text_repairability_required": true
   },
