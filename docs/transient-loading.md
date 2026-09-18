@@ -16,6 +16,18 @@ Then progressively load only the phase-specific files listed by the manifest.
 
 For a private repository, do not depend on a raw unauthenticated GitHub URL when the connector can read the repository directly.
 
+## Suggested invocation
+
+### English
+
+> @GitHub Load `zycdev/chatgpt-ppt-skill` from `main`, read `CHATGPT.md`, and follow that skill for the current PPT task. Then create a presentation from the attached material.
+
+### 中文
+
+> @GitHub 从 `main` 加载 `zycdev/chatgpt-ppt-skill`，读取 `CHATGPT.md`，并在当前 PPT 任务中严格按照该 Skill 执行。然后基于我提供的材料制作演示文稿。
+
+For reproducible work, replace `main` with a specific commit SHA when practical.
+
 ## Ref pinning
 
 For reproducible work, prefer a Git tag or commit SHA.
