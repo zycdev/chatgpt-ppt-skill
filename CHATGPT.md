@@ -1,6 +1,6 @@
 # ChatGPT Chat Bootstrap
 
-This file is the transient-load entrypoint for **ChatGPT PPT Skill v0.4.0**.
+This file is the transient-load entrypoint for **ChatGPT PPT Skill**.
 
 Use this repository as the execution contract for the current PPT task in ordinary ChatGPT Chat. This is not a request to register or install a native ChatGPT Skill.
 
