@@ -184,7 +184,7 @@ Wait for visual-direction approval and record it in `deck_state.json`.
 
 ## Phase 3 — Generate and approve one representative sample
 
-Choose a content-rich slide that stress-tests the intended visual system. Prefer a middle slide over a title slide when possible.
+Choose a content-rich slide that stress-tests the intended visual system. Prefer a middle slide over a title slide when possible. Use `examples/sample_slide_prompt.example.md` as the quality bar for the sample-slide prompt structure; unlike post-sample prompts, it must not pretend that an approved sample anchor already exists.
 
 Generate exactly one 16:9 sample using native ImageGen/image editing.
 
@@ -376,11 +376,14 @@ The final response should state:
 - `docs/qa-and-assembly.md` — QA, notes, and image-based PPTX assembly.
 - `docs/style-reuse.md` — style-source and reuse policy.
 - `references/style-catalog.md` — index of the restored detailed built-in style library.
+- `references/style-preview-gallery.md` — optional human-facing gallery of upstream style previews; do not load by default.
 - `references/*.md` (named style files) — full built-in style briefs inherited/adapted from upstream; load selected candidates on demand.
 - `references/deck_state.schema.json` — single-state-file schema.
 - `examples/deck_state.example.json` — example state.
 - `examples/visual_spec.example.md` — required visual-spec structure.
+- `examples/sample_slide_prompt.example.md` — high-quality representative-sample prompt used before any sample anchor exists.
 - `examples/slide_prompt.example.md` — high-quality post-sample mechanism-slide prompt.
 - `examples/slide_prompt_with_asset.example.md` — strict source-asset prompt example.
+- `examples/upstream-showcase.md` — optional documentation gallery for full-slide generation, strict source-figure integration, and single-slide revision.
 - `scripts/validate_project.cjs` — lightweight final-state/image validation.
 - `scripts/assemble_ppt.cjs` — image-based PPTX assembly with notes.
