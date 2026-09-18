@@ -24,7 +24,7 @@ This skill is intentionally designed for **ordinary ChatGPT Chat**, not Work or 
 
 When this skill is loaded transiently:
 
-1. Read the repository-root `CHATGPT.md` bootstrap file first.
+1. Read the repository-root `CHATGPT.md` bootstrap file first after any mandatory platform-level presentation/artifact initialization. Such initialization does not replace this skill's workflow or approval gates.
 2. Read `skill-manifest.json` and verify that its declared skill version matches this file's version.
 3. Read this `SKILL.md` completely before beginning the PPT task.
 4. Load supporting `docs/`, `references/`, and `examples/` files **only when the corresponding workflow phase requires them**. Do not ingest the entire repository by default.
@@ -148,6 +148,7 @@ Present the outline to the user and wait for approval.
 After approval:
 
 - save it as `outline.md`;
+- before first state creation, read `references/deck_state.schema.json` and `examples/deck_state.example.json`;
 - initialize/update `deck_state.json`;
 - mark `outline.approved = true`.
 
