@@ -23,12 +23,15 @@
     ],
     "sample_and_generation": [
       "docs/image-generation.md",
+      "docs/prompting.md",
       "docs/text-repairability.md",
-      "examples/slide_prompt.example.md"
+      "examples/slide_prompt.example.md",
+      "examples/slide_prompt_with_asset.example.md"
     ],
     "qa_and_assembly": [
       "docs/qa-and-assembly.md",
       "docs/text-repairability.md",
+      "scripts/validate_project.cjs",
       "scripts/assemble_ppt.cjs"
     ],
     "state_validation": [
@@ -36,6 +39,21 @@
       "examples/deck_state.example.json"
     ]
   },
+  "style_library": [
+    "references/清爽专业风.md",
+    "references/创意杂志风.md",
+    "references/电子墨水杂志风.md",
+    "references/数据仪表盘风.md",
+    "references/科研答辩风.md",
+    "references/复古扁平插画风.md",
+    "references/手绘技术解释风.md",
+    "references/手绘白板风.md",
+    "references/温暖手工风.md",
+    "references/麦肯锡风格.md",
+    "references/党政红风格.md",
+    "references/教学课件风.md"
+  ],
+  "style_loading_rule": "Use style-catalog.md to shortlist. Load only the detailed style reference files needed for the shortlist; after user selection, keep the selected detailed reference loaded for visual_spec and generation.",
   "session_policy": {
     "freeze_loaded_snapshot": true,
     "silent_midtask_refresh": false,
