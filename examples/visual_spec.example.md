@@ -50,6 +50,11 @@ A formal but modern Chinese research-defense deck: evidence-driven, diagram-led,
 - Keep enough clear margin for a solid overlay rectangle roughly 20% larger than the visible text bounds on every side.
 - Do not overuse visible cards; open white/flat space is preferred.
 
+## Constraint inheritance / overrides
+- Carry forward the selected `科研答辩风` avoid-list and rendering constraints unless explicitly overridden.
+- No animals, unrelated decorative objects, fake institution marks, or marketing-hero imagery in this example.
+- User-approved overrides: none.
+
 ## Hard constraints
 - 16:9 full-slide native ImageGen artwork.
 - Formal academic/research-defense tone.
