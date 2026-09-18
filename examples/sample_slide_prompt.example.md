@@ -9,6 +9,8 @@ This is a **quality reference for Phase 3 sample generation**. It deliberately u
 ## Canvas
 - One complete 16:9 PowerPoint slide image.
 - Language: Simplified Chinese.
+- **This call generates Slide 4 only: “迭代式信息搜寻｜从问题到证据的闭环”.**
+- This is not the cover and not a multi-slide sheet.
 - Do not render a slide number, watermark, fake citation, or unrelated logo.
 
 ## Deck goal and audience
@@ -22,6 +24,13 @@ The audience should immediately understand one core idea:
 **复杂问题不是一次检索完成，而是在“发现缺口—获取证据—更新问题”的循环中逐步收敛。**
 
 The page must demonstrate the typography, spacing, diagram language, density, color discipline, and repair-safe treatment that later slides will inherit.
+
+## Source anchors / content locks
+For a real source-grounded deck, replace these illustrative anchors with the actual section/page references.
+
+- [semantic] Source section on iterative retrieval: retrieval is repeated as evidence exposes unresolved information needs.
+- [verbatim] Keep the five approved stage labels below exactly as written.
+- [verbatim] Do not invent method names, metrics, citations, or organizations.
 
 ## Selected detailed style
 Use `references/科研答辩风.md` together with the approved `visual_spec.md`.
@@ -73,7 +82,7 @@ Suggested rhythm:
 Use one coherent process diagram. Do not turn the five stages into a generic row of identical cards.
 
 ## Text repairability
-- All visible text sits on white or flat solid-color local backgrounds.
+- All visible text, including the title, sits on white or flat solid-color local backgrounds.
 - No arrow, connector, gradient, texture, icon, or illustration detail passes behind text.
 - Long labels receive generous padding.
 - Keep labels far enough from arrows that a rectangle about 20% larger than each label could cover it without damaging the diagram.
@@ -86,6 +95,7 @@ Use one coherent process diagram. Do not turn the five stages into a generic row
 - Formal, modern technical/research tone.
 - One clear reading order and one dominant visual story.
 - Medium information density; no paragraph blocks.
+- No placeholders such as XXX/TBD and no page number.
 
 ## Negative constraints
 - No generic AI robot portrait.
@@ -102,5 +112,6 @@ Show this sample to the user only if:
 - all required Chinese text is correct and legible;
 - the iterative loop is visually obvious;
 - the page demonstrates a reusable visual system rather than a one-off poster;
-- all text regions pass the repairability overlay test;
-- the composition leaves room for later slides to vary while retaining the same visual identity.
+- all text regions, including title/header areas, pass the repairability overlay test;
+- the composition leaves room for later slides to vary while retaining the same visual identity;
+- no placeholder, page number, forbidden imagery, or unsupported content appears.
