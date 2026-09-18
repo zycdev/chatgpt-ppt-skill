@@ -289,7 +289,7 @@ Speaker notes here.
 Speaker notes here.
 ```
 
-Speaker notes should carry nuance, transitions, interpretation, and details intentionally omitted from the visual slide. They should not merely repeat visible text.
+Speaker notes should carry nuance, transitions, interpretation, and details intentionally omitted from the visual slide. They should not merely repeat visible text. For source-driven decks, they remain subject to `docs/source-grounding.md`: do not introduce unsupported names, affiliations, quantities, platforms, cooperation claims, or stronger wording than the source supports.
 
 Assemble the final deck using a presentation capability that can place accepted full-slide images and preserve notes **without altering the artwork**. Otherwise use:
 
