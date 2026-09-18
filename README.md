@@ -1,4 +1,4 @@
-# ChatGPT PPT Skill v0.4
+# ChatGPT PPT Skill
 
 A presentation workflow designed specifically for **ordinary ChatGPT Chat** and inspired by `ningzimu/codex-ppt-skill`.
 
@@ -84,7 +84,7 @@ scripts/
 
 ## Native Skill installation
 
-Native Skill installation is not required for this edition. If a future Chat surface exposes personal Skills reliably, the same repository may still be adapted for installation, but v0.4 is optimized around transient GitHub loading.
+Native Skill installation is not required for this edition. If a future Chat surface exposes personal Skills reliably, the same repository may still be adapted for installation, but this repository is optimized around transient GitHub loading in ordinary Chat.
 
 ## Attribution
 
