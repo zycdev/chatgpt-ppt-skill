@@ -9,6 +9,8 @@ This is a **quality reference for post-sample prompt structure**, not a fixed te
 ## Canvas
 - One complete 16:9 PowerPoint slide image.
 - Language: Simplified Chinese.
+- **This call generates Slide 7 only: “查询改写机制｜让检索随证据逐步收敛”.**
+- This is not the cover and not a multi-slide sheet.
 - Do not render a slide number, watermark, fake citation, or unrelated logo.
 
 ## Deck goal and audience
@@ -21,8 +23,15 @@ This is a core mechanism slide. It should answer:
 
 The audience should understand the mechanism in about 10 seconds, then inspect the four stages.
 
+## Source anchors / content locks
+For a real deck, replace these illustrative anchors with the exact source locations used for this slide.
+
+- [semantic] The next query is conditioned on the current evidence state and unresolved information gap.
+- [verbatim] Preserve the approved four stage labels and two decision labels exactly.
+- [verbatim] Do not invent metrics, citations, organizations, or method names.
+
 ## Primary visual anchor
-Use **Image 1: the approved sample slide** as the primary style reference.
+Use **Image 1: the approved sample slide; style reference only.**
 
 Match its:
 - palette and contrast;
@@ -33,7 +42,7 @@ Match its:
 - information density;
 - overall finish.
 
-Do **not** copy the sample's exact layout. This slide needs a mechanism-focused composition.
+Do **not** copy Image 1's title, facts, exact layout, scenic footer, or page-specific decorative objects. This slide needs a mechanism-focused composition.
 
 ## Selected style
 Use the approved `visual_spec.md`, derived from `references/科研答辩风.md`.
@@ -78,10 +87,10 @@ Create one dominant **mechanism loop with a decision branch**:
 - a clean branch shows “证据充分，停止” versus “继续检索”;
 - the continue branch loops back toward gap identification.
 
-Use visual grouping and arrows to explain the mechanism. Avoid four unrelated cards.
+Use visual grouping and arrows to explain the mechanism. Avoid four unrelated cards. Do not reuse the sample's decorative scenery unless it independently helps this page.
 
 ## Text repairability
-- Place all text on white or flat solid-color local backgrounds.
+- Place all text, including title/header areas, on white or flat solid-color local backgrounds.
 - No gradient, texture, illustration detail, diagram line, arrow, icon, or connector may pass behind text.
 - Keep generous padding around the title, stage labels, and decision labels.
 - Apply the overlay test: a rectangle roughly 20% larger than each text block should not damage nearby graphics or another text block.
@@ -94,6 +103,7 @@ Use visual grouping and arrows to explain the mechanism. Avoid four unrelated ca
 - Preserve generous whitespace despite technical density.
 - Use no more visible text than specified above unless a tiny functional label is essential.
 - Maintain style consistency with the approved sample.
+- No placeholders such as XXX/TBD and no page number.
 
 ## Negative constraints
 - No generic AI robot hero image.
@@ -110,7 +120,7 @@ Use visual grouping and arrows to explain the mechanism. Avoid four unrelated ca
 Accept only if:
 - all required Chinese text is correct and readable;
 - the feedback-and-stop logic is understandable without speaker notes;
-- the page clearly belongs to the same deck as the approved sample;
+- the page clearly belongs to the same deck as the approved sample without copying its page-specific content/layout;
 - all text regions pass the overlay-repair test;
 - no required relationship is missing;
-- no forbidden element appears.
+- no placeholder, page number, unsupported fact, or forbidden element appears.
