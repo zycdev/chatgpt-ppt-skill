@@ -1,0 +1,44 @@
+{
+  "skill_name": "chatgpt-ppt",
+  "version": "0.4.0",
+  "target_surface": "ChatGPT Chat",
+  "load_mode": "transient",
+  "entrypoint": "CHATGPT.md",
+  "core_files": [
+    "CHATGPT.md",
+    "skill-manifest.json",
+    "SKILL.md"
+  ],
+  "progressive_load": {
+    "outline": [
+      "docs/workflow-gates.md",
+      "docs/outline-style-sample.md",
+      "docs/assets-and-files.md"
+    ],
+    "style": [
+      "references/style-catalog.md",
+      "docs/outline-style-sample.md",
+      "docs/text-repairability.md",
+      "docs/style-reuse.md"
+    ],
+    "sample_and_generation": [
+      "docs/image-generation.md",
+      "docs/text-repairability.md",
+      "examples/slide_prompt.example.md"
+    ],
+    "qa_and_assembly": [
+      "docs/qa-and-assembly.md",
+      "docs/text-repairability.md",
+      "scripts/assemble_ppt.cjs"
+    ],
+    "state_validation": [
+      "references/deck_state.schema.json",
+      "examples/deck_state.example.json"
+    ]
+  },
+  "session_policy": {
+    "freeze_loaded_snapshot": true,
+    "silent_midtask_refresh": false,
+    "prefer_tag_or_commit_for_reproducibility": true
+  }
+}
