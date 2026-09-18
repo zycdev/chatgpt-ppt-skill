@@ -4,7 +4,7 @@ This edition is intended for ordinary ChatGPT Chat sessions that cannot reliably
 
 ## Preferred loading path
 
-When the GitHub connector is available, use it to read the private/public repository directly.
+Use the **GitHub connector first** when it is available. This is the preferred path for both public and private repositories.
 
 Bootstrap order:
 
@@ -14,11 +14,17 @@ Bootstrap order:
 
 Then progressively load only the phase-specific files listed by the manifest.
 
+For a private repository, do not depend on a raw unauthenticated GitHub URL when the connector can read the repository directly.
+
 ## Ref pinning
 
 For reproducible work, prefer a Git tag or commit SHA.
 
-If the user loads from a mutable branch such as `main`, treat the initially loaded repository snapshot as frozen for the current deck.
+If the user loads from a mutable branch such as `main`:
+
+- resolve the current repository commit when practical;
+- record the requested ref and resolved snapshot in task state;
+- treat the initially loaded snapshot as frozen for the current deck.
 
 Do not silently refresh skill files in the middle of a deck.
 
