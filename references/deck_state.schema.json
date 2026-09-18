@@ -3,93 +3,424 @@
   "$id": "https://example.invalid/chatgpt-ppt/deck_state.schema.json",
   "title": "ChatGPT PPT deck_state.json",
   "type": "object",
-  "required": ["schema_version","skill_binding","deck","outline","style","sample","slides","output"],
+  "required": [
+    "schema_version",
+    "skill_binding",
+    "deck",
+    "outline",
+    "style",
+    "sample",
+    "slides",
+    "output"
+  ],
   "properties": {
-    "schema_version": {"const":"0.4"},
+    "schema_version": {
+      "const": "0.4.1"
+    },
     "skill_binding": {
-      "type":"object",
-      "required":["load_mode","entrypoint","declared_version","requested_ref","freeze_policy"],
-      "properties":{
-        "load_mode":{"enum":["transient_github","manual_local"]},
-        "entrypoint":{"type":"string","minLength":1},
-        "declared_version":{"const":"0.4.0"},
-        "requested_ref":{"type":["string","null"]},
-        "freeze_policy":{"const":"session_snapshot"},
-        "loaded_at":{"type":["string","null"]}
-      },
-      "additionalProperties":true
-    },
-    "deck":{
-      "type":"object",
-      "required":["name","language","target_slide_count","status","approval_mode"],
-      "properties":{
-        "name":{"type":"string","minLength":1},
-        "goal":{"type":"string"},
-        "audience":{"type":"string"},
-        "language":{"type":"string","minLength":1},
-        "target_slide_count":{"type":"integer","minimum":1},
-        "approval_mode":{"enum":["interactive","auto_test"]},
-        "status":{"enum":["planning","style","sample","production","qa","assembly","complete"]}
-      },
-      "additionalProperties":true
-    },
-    "outline":{
-      "type":"object",
-      "required":["approved","path"],
-      "properties":{"approved":{"type":"boolean"},"path":{"type":"string"}},
-      "additionalProperties":true
-    },
-    "style":{
-      "type":"object",
-      "required":["approved","source_type","visual_spec_path","text_repairability_required"],
-      "properties":{
-        "approved":{"type":"boolean"},
-        "source_type":{"enum":["built_in","current_reference","reusable_asset","unset"]},
-        "source_name":{"type":["string","null"]},
-        "visual_spec_path":{"type":"string"},
-        "text_repairability_required":{"const":true}
-      },
-      "additionalProperties":true
-    },
-    "sample":{
-      "type":"object",
-      "required":["slide_number","approved","path","primary_visual_anchor"],
-      "properties":{
-        "slide_number":{"type":["integer","null"],"minimum":1},
-        "approved":{"type":"boolean"},
-        "path":{"type":["string","null"]},
-        "primary_visual_anchor":{"type":"boolean"}
-      },
-      "additionalProperties":true
-    },
-    "slides":{
-      "type":"object",
-      "patternProperties":{
-        "^[1-9][0-9]*$":{
-          "type":"object",
-          "required":["title","status","path"],
-          "properties":{
-            "title":{"type":"string"},
-            "status":{"enum":["planned","generating","needs_repair","needs_regeneration","accepted"]},
-            "path":{"type":["string","null"]},
-            "prompt_path":{"type":["string","null"]},
-            "notes":{"type":"string"}
-          },
-          "additionalProperties":true
+      "type": "object",
+      "required": [
+        "load_mode",
+        "entrypoint",
+        "declared_version",
+        "requested_ref",
+        "resolved_commit",
+        "freeze_policy"
+      ],
+      "properties": {
+        "load_mode": {
+          "enum": [
+            "transient_github",
+            "manual_local"
+          ]
+        },
+        "entrypoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "declared_version": {
+          "const": "0.4.1"
+        },
+        "requested_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "resolved_commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "freeze_policy": {
+          "const": "session_snapshot"
+        },
+        "loaded_at": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
-      "additionalProperties":false
+      "additionalProperties": true
     },
-    "output":{
-      "type":"object",
-      "required":["pptx_path","speech_path","notes_embedded"],
-      "properties":{
-        "pptx_path":{"type":["string","null"]},
-        "speech_path":{"type":["string","null"]},
-        "notes_embedded":{"type":"boolean"}
+    "deck": {
+      "type": "object",
+      "required": [
+        "name",
+        "language",
+        "target_slide_count",
+        "status",
+        "approval_mode",
+        "qa_mode",
+        "max_corrective_attempts",
+        "source_grounding_required"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goal": {
+          "type": "string"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_slide_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "approval_mode": {
+          "enum": [
+            "interactive",
+            "auto_test"
+          ]
+        },
+        "qa_mode": {
+          "enum": [
+            "standard",
+            "light"
+          ]
+        },
+        "max_corrective_attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "source_grounding_required": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "planning",
+            "style",
+            "sample",
+            "production",
+            "qa",
+            "assembly",
+            "complete"
+          ]
+        }
       },
-      "additionalProperties":true
+      "additionalProperties": true
+    },
+    "outline": {
+      "type": "object",
+      "required": [
+        "approved",
+        "path",
+        "content_lock_applied"
+      ],
+      "properties": {
+        "approved": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_lock_applied": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "style": {
+      "type": "object",
+      "required": [
+        "approved",
+        "source_type",
+        "visual_spec_path",
+        "text_repairability_required"
+      ],
+      "properties": {
+        "approved": {
+          "type": "boolean"
+        },
+        "source_type": {
+          "enum": [
+            "built_in",
+            "current_reference",
+            "reusable_asset",
+            "unset"
+          ]
+        },
+        "source_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "visual_spec_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_repairability_required": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "sample": {
+      "type": "object",
+      "required": [
+        "slide_number",
+        "approved",
+        "path",
+        "primary_visual_anchor",
+        "preflight_passed",
+        "attempt_count",
+        "issues",
+        "waivers"
+      ],
+      "properties": {
+        "slide_number": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "primary_visual_anchor": {
+          "type": "boolean"
+        },
+        "preflight_passed": {
+          "type": "boolean"
+        },
+        "attempt_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "waivers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "slides": {
+      "type": "object",
+      "patternProperties": {
+        "^[1-9][0-9]*$": {
+          "type": "object",
+          "required": [
+            "title",
+            "status",
+            "path",
+            "prompt_path",
+            "attempt_count",
+            "issues",
+            "waivers",
+            "source_refs"
+          ],
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "planned",
+                "generating",
+                "needs_repair",
+                "needs_regeneration",
+                "needs_user_decision",
+                "accepted",
+                "accepted_with_waiver"
+              ]
+            },
+            "path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "prompt_path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "attempt_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "waivers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "accepted_with_waiver"
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "waivers": {
+                    "minItems": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "accepted",
+                      "accepted_with_waiver"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "prompt_path": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          ],
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "required": [
+        "pptx_path",
+        "speech_path",
+        "notes_embedded",
+        "validation_passed"
+      ],
+      "properties": {
+        "pptx_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "speech_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "notes_embedded": {
+          "type": "boolean"
+        },
+        "validation_passed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
     }
   },
-  "additionalProperties":true
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "deck": {
+            "properties": {
+              "source_grounding_required": {
+                "const": true
+              }
+            },
+            "required": [
+              "source_grounding_required"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outline": {
+            "properties": {
+              "content_lock_applied": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
 }
