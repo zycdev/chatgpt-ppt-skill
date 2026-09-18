@@ -66,6 +66,9 @@ Key design rules:
 - one lightweight `deck_state.json`;
 - three explicit human approval gates in normal interactive use;
 - one approved sample as the single primary visual anchor;
+- source-grounding locks for exact names, formal terms, numbers, metrics, and source-critical claims;
+- complete per-slide prompts saved **before** ImageGen, with one slide per generation call;
+- bounded retry/waiver semantics instead of silent infinite repair loops;
 - global repair-safe text zones for later text-box overlay corrections;
 - deterministic tooling limited to file inspection, validation, notes, and image-based PPTX assembly.
 
