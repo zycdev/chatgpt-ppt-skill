@@ -157,7 +157,8 @@
         "approved",
         "source_type",
         "visual_spec_path",
-        "text_repairability_required"
+        "text_repairability_required",
+        "constraint_overrides"
       ],
       "properties": {
         "approved": {
@@ -183,6 +184,12 @@
         },
         "text_repairability_required": {
           "const": true
+        },
+        "constraint_overrides": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": true
