@@ -9,13 +9,20 @@ This example demonstrates how to integrate an original technical figure without 
 ## Canvas
 - One complete 16:9 PowerPoint slide image.
 - Simplified Chinese.
-- No slide number, watermark, or invented citation.
+- **This call generates Slide 8 only: “模型架构｜以原始结构图作为核心证据”.**
+- This is not the cover and not a multi-slide sheet.
+- No slide number, watermark, placeholder, or invented citation.
 
 ## Slide intent
 Use the supplied model-architecture figure as the main evidence. The surrounding slide should help the audience read the original figure without changing its internal semantics.
 
+## Source anchors / content locks
+- [strict asset] The original source figure is authoritative for internal labels, equations, module ordering, connectivity, and visual evidence.
+- [verbatim] Preserve the approved title/callout/takeaway wording below.
+- [semantic] Surrounding annotations may explain the reading order but must not reinterpret the architecture.
+
 ## Input images
-- **Image 1 — approved sample slide; style reference only.** Match visual identity, not layout or content.
+- **Image 1 — approved sample slide; style reference only.** Match visual identity, not layout, factual content, scenic footer, or page-specific decoration.
 - **Image 2 — original model-architecture figure; strict input asset.** It must appear visibly and remain semantically unchanged.
 
 ## Strict asset fidelity for Image 2
@@ -51,13 +58,14 @@ Place two concise callouts beside the figure. If leader lines are needed, termin
 Do not shrink the source figure merely to make room for decoration.
 
 ## Text repairability
-All newly rendered text must sit on uniform solid-color local backgrounds with generous clear space. No leader line, source-figure mark, texture, or decoration may pass behind text. Ensure each new text block could later be covered by a flat rectangle about 20% larger without obscuring Image 2 or damaging nearby graphics.
+All newly rendered text, including title/header areas, must sit on uniform solid-color local backgrounds with generous clear space. No leader line, source-figure mark, gradient, texture, or decoration may pass behind text. Ensure each new text block could later be covered by a flat rectangle about 20% larger without obscuring Image 2 or damaging nearby graphics.
 
 ## Hard constraints
 - Image 2 is evidence, not style inspiration.
-- Maintain the approved sample's visual language.
+- Maintain the approved sample's visual language without copying its page-specific content/layout.
 - Do not modify the source figure's semantic content.
 - Keep surrounding explanation visually subordinate to the original evidence.
+- No placeholders such as XXX/TBD and no page number.
 
 ## Negative constraints
 - No recreated diagram.
@@ -68,4 +76,9 @@ All newly rendered text must sit on uniform solid-color local backgrounds with g
 - No line crossing any text.
 
 ## Acceptance criteria
-Accept only if the source figure remains recognizable and faithful, all newly rendered text is correct, and the surrounding callouts clarify rather than obscure the evidence.
+Accept only if:
+- the source figure remains recognizable and faithful;
+- all newly rendered text is correct;
+- the surrounding callouts clarify rather than obscure the evidence;
+- all newly rendered text regions pass the repairability overlay test;
+- no placeholder, page number, unsupported fact, or forbidden element appears.
