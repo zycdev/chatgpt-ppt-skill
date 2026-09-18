@@ -43,15 +43,21 @@ Do not carry over private or one-off content:
 
 ## Priority
 
-For the current deck:
+Before sample approval:
 
 1. explicit user instructions;
-2. explicit user-supplied style reference;
-3. approved representative sample;
-4. approved `visual_spec.md`;
-5. selected built-in detailed style reference.
+2. explicit user-supplied style reference, when provided;
+3. approved `visual_spec.md`;
+4. selected built-in detailed style reference.
 
-After sample approval, the approved sample is the primary visual anchor for generation, while `visual_spec.md` and the detailed reference remain authoritative for constraints not visible in the sample.
+After sample approval:
+
+1. explicit user instructions;
+2. approved representative sample as the **primary visual anchor**;
+3. approved `visual_spec.md`;
+4. the source style reference (user-supplied or built-in) for constraints not visible in the sample.
+
+This preserves the single-anchor rule: a source style reference guides the sample, but does not compete with the approved sample afterward.
 
 ## Long-term persistence
 
