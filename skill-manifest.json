@@ -65,6 +65,7 @@
   },
   "optional_resources": {
     "style_preview_gallery": "references/style-preview-gallery.md",
-    "upstream_visual_showcase": "examples/upstream-showcase.md"
+    "upstream_visual_showcase": "examples/upstream-showcase.md",
+    "repo_self_check": "scripts/check_skill_repo.cjs"
   }
 }
