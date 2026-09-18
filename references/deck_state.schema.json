@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/chatgpt-ppt/deck_state.schema.json",
+  "title": "ChatGPT PPT deck_state.json",
+  "type": "object",
+  "required": ["schema_version","skill_binding","deck","outline","style","sample","slides","output"],
+  "properties": {
+    "schema_version": {"const":"0.4"},
+    "skill_binding": {
+      "type":"object",
+      "required":["load_mode","entrypoint","declared_version","requested_ref","freeze_policy"],
+      "properties":{
+        "load_mode":{"enum":["transient_github","manual_local"]},
+        "entrypoint":{"type":"string","minLength":1},
+        "declared_version":{"const":"0.4.0"},
+        "requested_ref":{"type":["string","null"]},
+        "freeze_policy":{"const":"session_snapshot"},
+        "loaded_at":{"type":["string","null"]}
+      },
+      "additionalProperties":true
+    },
+    "deck":{
+      "type":"object",
+      "required":["name","language","target_slide_count","status","approval_mode"],
+      "properties":{
+        "name":{"type":"string","minLength":1},
+        "goal":{"type":"string"},
+        "audience":{"type":"string"},
+        "language":{"type":"string","minLength":1},
+        "target_slide_count":{"type":"integer","minimum":1},
+        "approval_mode":{"enum":["interactive","auto_test"]},
+        "status":{"enum":["planning","style","sample","production","qa","assembly","complete"]}
+      },
+      "additionalProperties":true
+    },
+    "outline":{
+      "type":"object",
+      "required":["approved","path"],
+      "properties":{"approved":{"type":"boolean"},"path":{"type":"string"}},
+      "additionalProperties":true
+    },
+    "style":{
+      "type":"object",
+      "required":["approved","source_type","visual_spec_path","text_repairability_required"],
+      "properties":{
+        "approved":{"type":"boolean"},
+        "source_type":{"enum":["built_in","current_reference","reusable_asset","unset"]},
+        "source_name":{"type":["string","null"]},
+        "visual_spec_path":{"type":"string"},
+        "text_repairability_required":{"const":true}
+      },
+      "additionalProperties":true
+    },
+    "sample":{
+      "type":"object",
+      "required":["slide_number","approved","path","primary_visual_anchor"],
+      "properties":{
+        "slide_number":{"type":["integer","null"],"minimum":1},
+        "approved":{"type":"boolean"},
+        "path":{"type":["string","null"]},
+        "primary_visual_anchor":{"type":"boolean"}
+      },
+      "additionalProperties":true
+    },
+    "slides":{
+      "type":"object",
+      "patternProperties":{
+        "^[1-9][0-9]*$":{
+          "type":"object",
+          "required":["title","status","path"],
+          "properties":{
+            "title":{"type":"string"},
+            "status":{"enum":["planned","generating","needs_repair","needs_regeneration","accepted"]},
+            "path":{"type":["string","null"]},
+            "prompt_path":{"type":["string","null"]},
+            "notes":{"type":"string"}
+          },
+          "additionalProperties":true
+        }
+      },
+      "additionalProperties":false
+    },
+    "output":{
+      "type":"object",
+      "required":["pptx_path","speech_path","notes_embedded"],
+      "properties":{
+        "pptx_path":{"type":["string","null"]},
+        "speech_path":{"type":["string","null"]},
+        "notes_embedded":{"type":"boolean"}
+      },
+      "additionalProperties":true
+    }
+  },
+  "additionalProperties":true
+}
