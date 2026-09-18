@@ -1,6 +1,6 @@
 {
   "skill_name": "chatgpt-ppt",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "target_surface": "ChatGPT Chat",
   "load_mode": "transient",
   "entrypoint": "CHATGPT.md",
@@ -12,6 +12,7 @@
   "progressive_load": {
     "outline": [
       "docs/workflow-gates.md",
+      "docs/source-grounding.md",
       "docs/outline-style-sample.md",
       "docs/assets-and-files.md"
     ],
@@ -22,6 +23,7 @@
       "docs/style-reuse.md"
     ],
     "sample_and_generation": [
+      "docs/source-grounding.md",
       "docs/image-generation.md",
       "docs/prompting.md",
       "docs/text-repairability.md",
@@ -30,6 +32,7 @@
       "examples/slide_prompt_with_asset.example.md"
     ],
     "qa_and_assembly": [
+      "docs/source-grounding.md",
       "docs/qa-and-assembly.md",
       "docs/text-repairability.md",
       "scripts/validate_project.cjs",
