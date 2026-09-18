@@ -103,7 +103,10 @@ The approved `visual_spec.md` should explicitly capture:
 - source-asset treatment;
 - text repairability;
 - hard constraints;
-- negative constraints.
+- negative constraints;
+- **constraint inheritance / overrides** — carry forward the selected detailed style's relevant `avoid` / rendering constraints. If the user intentionally overrides one, record that override explicitly instead of silently dropping the constraint.
+
+Do not weaken a selected style's explicit avoid-list merely because it was omitted from a shorter summary. The final `visual_spec.md` is the normalized contract: every retained restriction should be visible there, and every intentional exception should be named.
 
 Treat the selected detailed reference as a **style system**, not a rigid template. Keep visual identity stable while varying composition according to slide role.
 
