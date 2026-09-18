@@ -41,10 +41,32 @@ Do not interpret “make the whole deck” or “run the workflow” as permissi
 
 ### GitHub connector
 
+**English**
+
 > @GitHub Load `zycdev/chatgpt-ppt-skill` from `main`, read `CHATGPT.md`, and follow that skill for the current PPT task. Then create a presentation from the attached material.
+
+**中文**
+
+> @GitHub 从 `main` 加载 `zycdev/chatgpt-ppt-skill`，读取 `CHATGPT.md`，并在当前 PPT 任务中严格按照该 Skill 执行。然后基于我提供的材料制作演示文稿。
+
+### Commit-pinned GitHub connector
+
+**English**
+
+> @GitHub Load `zycdev/chatgpt-ppt-skill` at commit `<COMMIT_SHA>`, read `CHATGPT.md`, and use that exact snapshot for every skill file in this deck. Then create a presentation from the attached material.
+
+**中文**
+
+> @GitHub 加载 `zycdev/chatgpt-ppt-skill` 的 commit `<COMMIT_SHA>`，读取 `CHATGPT.md`，并在本次 PPT 任务中始终使用该提交对应的同一 Skill 快照，不要中途切换版本。然后基于我提供的材料制作演示文稿。
 
 ### Public raw URL fallback
 
+**English**
+
 > Load and follow this ChatGPT PPT skill for the current task: `<RAW_URL_TO_CHATGPT.md>`. Then create a presentation from the attached material.
+
+**中文**
+
+> 请加载并在当前任务中严格遵循这个 ChatGPT PPT Skill：`<RAW_URL_TO_CHATGPT.md>`。然后基于我提供的材料制作演示文稿。
 
 If the supplied URL points to the repository root rather than this file, locate and read `/CHATGPT.md` at that same ref first.
