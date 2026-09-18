@@ -23,6 +23,7 @@ function parseArgs(argv) {
     const a = argv[i];
     if (a === '--project') out.project = argv[++i];
     else if (a === '--output') out.output = argv[++i];
+    else if (a === '--validate-only') out.validateOnly = true;
     else if (a === '--help' || a === '-h') out.help = true;
     else throw new Error(`Unknown argument: ${a}`);
   }
@@ -30,68 +31,114 @@ function parseArgs(argv) {
 }
 
 function usage() {
-  console.log('Usage: node scripts/assemble_ppt.cjs --project /path/to/project --output /path/to/output.pptx');
+  console.log('Usage: node scripts/assemble_ppt.cjs --project /path/to/project --output /path/to/output.pptx [--validate-only]');
 }
 
-function naturalSlideNumber(filename) {
-  const m = filename.match(/slide_(\d+)/i);
-  return m ? Number(m[1]) : Number.MAX_SAFE_INTEGER;
+function slideNumber(filename) {
+  const m = filename.match(/^slide_(\d+)\.(png|jpe?g|webp)$/i);
+  return m ? Number(m[1]) : null;
+}
+
+function getSlideImages(imgDir) {
+  const items = fs.readdirSync(imgDir)
+    .map(filename => ({ filename, number: slideNumber(filename) }))
+    .filter(x => x.number !== null)
+    .sort((a, b) => a.number - b.number || a.filename.localeCompare(b.filename));
+
+  if (!items.length) throw new Error(`No slide images found in ${imgDir}`);
+
+  const seen = new Set();
+  for (const item of items) {
+    if (seen.has(item.number)) throw new Error(`Duplicate slide number: ${item.number}`);
+    seen.add(item.number);
+  }
+
+  for (let expected = 1; expected <= items.length; expected++) {
+    if (!seen.has(expected)) throw new Error(`Missing slide image for slide ${expected}`);
+  }
+  return items;
 }
 
 function parseSpeech(md) {
   const notes = new Map();
   if (!md || !md.trim()) return notes;
-  const re = /^##\s+Slide\s+(\d+)(?::[^\n]*)?\s*$\n([\s\S]*?)(?=^##\s+Slide\s+\d+|\s*$)/gmi;
-  let m;
-  while ((m = re.exec(md)) !== null) {
-    notes.set(Number(m[1]), m[2].trim());
+
+  const heading = /^#{2,4}\s*(?:Slide\s*(\d+)|第\s*(\d+)\s*页)\b.*$/i;
+  let current = null;
+  let buf = [];
+
+  const flush = () => {
+    if (current === null) return;
+    const text = buf.join('\n').trim();
+    if (text) notes.set(current, text);
+  };
+
+  for (const rawLine of md.split(/\r?\n/)) {
+    const m = rawLine.trim().match(heading);
+    if (m) {
+      flush();
+      current = Number(m[1] || m[2]);
+      buf = [];
+    } else if (current !== null) {
+      buf.push(rawLine);
+    }
   }
+  flush();
   return notes;
 }
 
 async function main() {
   const args = parseArgs(process.argv);
-  if (args.help || !args.project || !args.output) {
+  if (args.help || !args.project || (!args.output && !args.validateOnly)) {
     usage();
     if (!args.help) process.exitCode = 2;
     return;
   }
 
   const project = path.resolve(args.project);
-  const output = path.resolve(args.output);
   const imgDir = path.join(project, 'origin_image');
   if (!fs.existsSync(imgDir)) throw new Error(`Missing origin_image directory: ${imgDir}`);
 
-  const images = fs.readdirSync(imgDir)
-    .filter(f => /^slide_\d+\.(png|jpe?g|webp)$/i.test(f))
-    .sort((a, b) => naturalSlideNumber(a) - naturalSlideNumber(b));
-
-  if (!images.length) throw new Error(`No slide images found in ${imgDir}`);
-
+  const images = getSlideImages(imgDir);
   const speechPath = path.join(project, 'speech.md');
   const speech = fs.existsSync(speechPath) ? fs.readFileSync(speechPath, 'utf8') : '';
   const notes = parseSpeech(speech);
 
+  const validation = {
+    project,
+    slide_count: images.length,
+    first_slide: images[0].filename,
+    last_slide: images[images.length - 1].filename,
+    notes_count: [...notes.keys()].filter(n => n >= 1 && n <= images.length).length
+  };
+
+  if (args.validateOnly) {
+    console.log(JSON.stringify(validation, null, 2));
+    return;
+  }
+
+  const output = path.resolve(args.output);
   const PptxGenJS = loadPptxGenJS();
   const pptx = new PptxGenJS();
   pptx.layout = 'LAYOUT_WIDE';
   pptx.author = 'ChatGPT PPT Skill';
   pptx.subject = 'Image-based presentation visual draft';
   pptx.title = path.basename(output, path.extname(output));
-  pptx.company = 'OpenAI';
   pptx.lang = 'zh-CN';
 
-  images.forEach((filename, idx) => {
+  for (const item of images) {
     const slide = pptx.addSlide();
     slide.background = { color: 'FFFFFF' };
-    slide.addImage({ path: path.join(imgDir, filename), x: 0, y: 0, w: 13.333, h: 7.5 });
-    const slideNo = idx + 1;
-    if (notes.has(slideNo)) slide.addNotes(notes.get(slideNo));
-  });
+    slide.addImage({
+      path: path.join(imgDir, item.filename),
+      x: 0, y: 0, w: 13.333, h: 7.5
+    });
+    if (notes.has(item.number)) slide.addNotes(notes.get(item.number));
+  }
 
   fs.mkdirSync(path.dirname(output), { recursive: true });
   await pptx.writeFile({ fileName: output });
-  console.log(JSON.stringify({ output, slide_count: images.length, notes_count: [...notes.keys()].filter(n => n >= 1 && n <= images.length).length }));
+  console.log(JSON.stringify({ output, ...validation }));
 }
 
 main().catch(err => {
