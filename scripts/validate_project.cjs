@@ -16,6 +16,48 @@ function readPngSize(filePath) {
   return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
 }
 
+function hasHeading(md, pattern) {
+  return new RegExp('^##\\s+' + pattern + '\\s*$', 'im').test(md);
+}
+
+function validatePrompt({ promptPath, slide, slideNumber, sourceGroundingRequired, errors, warnings, project }) {
+  if (!promptPath || !fs.existsSync(promptPath)) {
+    errors.push(`Missing saved prompt for slide ${slideNumber}: ${path.relative(project, promptPath || '')}`);
+    return;
+  }
+
+  const md = fs.readFileSync(promptPath, 'utf8');
+  if (md.trim().length < 500) {
+    errors.push(`Slide ${slideNumber} prompt is too short to be a self-contained generation brief`);
+  }
+
+  const requiredHeadings = [
+    ['Canvas', 'Canvas(?:\\s*/\\s*slide identity)?'],
+    ['Exact visible text', 'Exact visible text'],
+    ['Hard constraints', 'Hard constraints'],
+    ['Acceptance criteria', 'Acceptance criteria(?:\\s*/\\s*QA)?']
+  ];
+  for (const [label, regex] of requiredHeadings) {
+    if (!hasHeading(md, regex)) {
+      errors.push(`Slide ${slideNumber} prompt missing required heading: ## ${label}`);
+    }
+  }
+
+  if (sourceGroundingRequired &&
+      !/^##\s+Source anchors(?:\s*\/\s*content locks)?\s*$/im.test(md)) {
+    errors.push(`Slide ${slideNumber} prompt missing source anchors/content locks for a source-grounded deck`);
+  }
+
+  const placeholder = /\b(?:XXX|TBD|TODO|PLACEHOLDER)\b|Lorem\s+ipsum/i;
+  if (placeholder.test(md)) {
+    errors.push(`Slide ${slideNumber} prompt contains placeholder text`);
+  }
+
+  if (slide?.title && !md.includes(slide.title)) {
+    warnings.push(`Slide ${slideNumber} prompt does not contain the exact state title: ${slide.title}`);
+  }
+}
+
 function main() {
   const args = process.argv.slice(2);
   const i = args.indexOf('--project');
@@ -42,8 +84,24 @@ function main() {
     die(`Invalid deck_state.json: ${e.message}`);
   }
 
+  if (state?.schema_version !== '0.4.1') {
+    errors.push(`Expected deck_state schema_version 0.4.1, got ${state?.schema_version ?? 'missing'}`);
+  }
+  if (state?.skill_binding?.declared_version !== '0.4.1') {
+    errors.push(`Expected skill_binding.declared_version 0.4.1, got ${state?.skill_binding?.declared_version ?? 'missing'}`);
+  }
+
+  if (state?.skill_binding?.load_mode === 'transient_github' && !state?.skill_binding?.resolved_commit) {
+    warnings.push('Transient GitHub state does not record resolved_commit; reproducibility is reduced');
+  }
+
   const count = Number(state?.deck?.target_slide_count || 0);
   if (!Number.isInteger(count) || count < 1) errors.push('Invalid deck.target_slide_count');
+
+  const sourceGroundingRequired = state?.deck?.source_grounding_required === true;
+  if (sourceGroundingRequired && state?.outline?.content_lock_applied !== true) {
+    errors.push('Source-grounded deck is missing outline.content_lock_applied=true');
+  }
 
   if (state?.deck?.approval_mode === 'interactive') {
     if (!state?.outline?.approved) errors.push('Outline is not approved');
@@ -54,25 +112,54 @@ function main() {
   if (state?.sample?.approved && !state?.sample?.primary_visual_anchor) {
     errors.push('Approved sample is not marked as primary_visual_anchor');
   }
+  if (state?.sample?.approved && !state?.sample?.preflight_passed) {
+    const waivers = Array.isArray(state?.sample?.waivers) ? state.sample.waivers : [];
+    if (!waivers.length) {
+      errors.push('Approved sample failed preflight and has no explicit waiver');
+    } else {
+      warnings.push('Representative sample was approved with an explicit preflight waiver');
+    }
+  }
+
+  const acceptedStatuses = new Set(['accepted', 'accepted_with_waiver']);
 
   for (let n = 1; n <= count; n++) {
     const key = String(n);
     const slide = state?.slides?.[key];
-    const expected = path.join(imageDir, `slide_${String(n).padStart(2, '0')}.png`);
+    const expectedImage = path.join(imageDir, `slide_${String(n).padStart(2, '0')}.png`);
 
-    if (!slide) errors.push(`Missing state entry for slide ${n}`);
-    else if (slide.status !== 'accepted') errors.push(`Slide ${n} status is ${slide.status}, not accepted`);
+    if (!slide) {
+      errors.push(`Missing state entry for slide ${n}`);
+      continue;
+    }
 
-    if (!fs.existsSync(expected)) {
-      errors.push(`Missing final image: ${path.relative(project, expected)}`);
+    if (!acceptedStatuses.has(slide.status)) {
+      errors.push(`Slide ${n} status is ${slide.status}, not accepted/accepted_with_waiver`);
+    }
+
+    const waivers = Array.isArray(slide.waivers) ? slide.waivers : [];
+    const issues = Array.isArray(slide.issues) ? slide.issues : [];
+
+    if (slide.status === 'accepted_with_waiver' && !waivers.length) {
+      errors.push(`Slide ${n} is accepted_with_waiver but has no recorded waiver`);
+    }
+    if (slide.status === 'accepted' && waivers.length) {
+      errors.push(`Slide ${n} is accepted but still records waiver(s); use accepted_with_waiver`);
+    }
+    if (slide.status === 'accepted' && issues.length) {
+      errors.push(`Slide ${n} is accepted but still records unresolved issue(s)`);
+    }
+
+    if (!fs.existsSync(expectedImage)) {
+      errors.push(`Missing final image: ${path.relative(project, expectedImage)}`);
     } else {
-      const stat = fs.statSync(expected);
+      const stat = fs.statSync(expectedImage);
       if (stat.size === 0) {
-        errors.push(`Empty final image: ${path.relative(project, expected)}`);
+        errors.push(`Empty final image: ${path.relative(project, expectedImage)}`);
       } else {
-        const size = readPngSize(expected);
+        const size = readPngSize(expectedImage);
         if (!size || !size.width || !size.height) {
-          errors.push(`Invalid PNG final image: ${path.relative(project, expected)}`);
+          errors.push(`Invalid PNG final image: ${path.relative(project, expectedImage)}`);
         } else {
           const ratio = size.width / size.height;
           const target = 16 / 9;
@@ -83,17 +170,36 @@ function main() {
       }
     }
 
-    const promptPath = path.join(project, 'prompts', `slide_${String(n).padStart(2, '0')}.md`);
-    if (!fs.existsSync(promptPath)) warnings.push(`Missing saved prompt for slide ${n}`);
+    const promptRel = slide.prompt_path || `prompts/slide_${String(n).padStart(2, '0')}.md`;
+    const promptPath = path.resolve(project, promptRel);
+    validatePrompt({
+      promptPath,
+      slide,
+      slideNumber: n,
+      sourceGroundingRequired,
+      errors,
+      warnings,
+      project
+    });
+
+    if (sourceGroundingRequired) {
+      const refs = Array.isArray(slide.source_refs) ? slide.source_refs : [];
+      if (!refs.length) warnings.push(`Slide ${n} has no source_refs recorded in deck_state`);
+    }
   }
 
   const stray = fs.readdirSync(imageDir)
-    .filter(f => !/^slide_\d+\.(png|jpe?g|webp)$/i.test(f));
-  if (stray.length) warnings.push(`Non-final files in origin_image: ${stray.join(', ')}`);
+    .filter(f => !/^slide_\d+\.png$/i.test(f));
+  if (stray.length) warnings.push(`Non-final/non-PNG files in origin_image: ${stray.join(', ')}`);
+
+  if (state?.output?.validation_passed !== true) {
+    warnings.push('output.validation_passed is not true yet; set it only after all validation/assembly checks complete');
+  }
 
   const result = {
     ok: errors.length === 0,
     target_slide_count: count,
+    accepted_with_waiver: Object.values(state?.slides || {}).filter(s => s?.status === 'accepted_with_waiver').length,
     errors,
     warnings
   };
