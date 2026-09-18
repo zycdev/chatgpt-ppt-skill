@@ -1,6 +1,6 @@
 ---
 name: chatgpt-ppt
-version: 0.4.0
+version: 0.4.1
 description: Create visually unified, image-based PowerPoint visual drafts in ordinary ChatGPT Chat from papers, reports, notes, outlines, web research, or user-supplied assets. Designed for transient loading from a GitHub-hosted skill repository. Uses explicit outline/style/sample approval gates, native ChatGPT ImageGen for every full-slide artwork, one approved sample as the primary visual anchor, repair-safe text zones, lightweight deck_state.json recovery, QA, speaker notes, and PPTX assembly.
 ---
 
@@ -50,6 +50,9 @@ Record the transient skill binding in `deck_state.json` so an interrupted conver
 5. Unless the user explicitly asks for an automated test/dogfood run, all three approval gates must be **actual user approvals**: outline, visual direction, and representative sample.
 6. The approved sample slide is the **single primary visual anchor** for all subsequent slides. Do not create competing independent style anchors after sample approval unless the user explicitly changes the art direction.
 7. Every post-sample slide prompt must inherit the approved visual specification's hard constraints, negative constraints, and text-repairability rules.
+8. For source-driven decks, lock exact names, formal titles, numbers, dates, metrics, formulas, and other source-critical content before generation. See `docs/source-grounding.md`.
+9. ImageGen execution is **one slide per call**. A user request to generate the remaining deck is an orchestration instruction, not a multi-slide ImageGen prompt.
+10. Saved `prompts/slide_XX.md` files are pre-generation execution briefs, not retrospective summaries.
 
 ## Global Text Repairability Contract
 
@@ -122,7 +125,7 @@ Use this structure for a deck project:
 
 ## Phase 1 — Understand the source and draft the outline
 
-Read `docs/workflow-gates.md`, `docs/outline-style-sample.md`, and `docs/assets-and-files.md`.
+Read `docs/workflow-gates.md`, `docs/source-grounding.md`, `docs/outline-style-sample.md`, and `docs/assets-and-files.md`.
 
 Determine from the user's request and supplied materials:
 
@@ -140,6 +143,8 @@ Draft a slide-by-slide narrative rather than transcribing the source document. E
 - role;
 - proposed title;
 - 2–4 core messages;
+- locked text / exact names / numbers that must not drift;
+- source anchors for important claims when source material exists;
 - intended visual structure;
 - required source assets, if any.
 
@@ -150,6 +155,7 @@ After approval:
 - save it as `outline.md`;
 - before first state creation, read `references/deck_state.schema.json` and `examples/deck_state.example.json`;
 - initialize/update `deck_state.json`;
+- set `outline.content_lock_applied = true` for source-driven decks only after the saved outline contains the required locks/source anchors;
 - mark `outline.approved = true`.
 
 ## Phase 2 — Define and approve the visual direction
@@ -173,7 +179,7 @@ Create `visual_spec.md` containing at least:
 - spacing and density;
 - diagram/illustration language;
 - chart/figure treatment;
-- recurring motifs;
+- recurring motifs and an explicit **motif reuse rule** so sample-specific scenery/decor does not become mandatory furniture on every slide;
 - source-asset treatment;
 - **text-repairability rules**;
 - **hard constraints**;
@@ -199,7 +205,7 @@ The sample must obey:
 - the Global Text Repairability Contract;
 - no invented citations, logos, page numbers, or decorative microtext.
 
-Inspect the sample before showing it to the user. If it clearly violates hard constraints, repair/regenerate before presenting it for approval.
+Run a **sample preflight** before showing it to the user. Check exact locked text/source fidelity, slide identity, placeholders/inventions, page numbers, forbidden imagery, text repairability including title/header bands, and obvious layout failures. If it violates a hard constraint, repair/regenerate before presenting it for approval. Record `sample.preflight_passed`, attempt count, issues, and any explicit waiver in `deck_state.json`.
 
 If the user requests changes, edit/regenerate until approved.
 
@@ -214,17 +220,19 @@ Do not create a second independent style anchor. Additional generated assets mus
 
 ## Phase 4 — Generate the remaining slides sequentially
 
-Read `docs/image-generation.md`, `docs/prompting.md`, and `docs/text-repairability.md`. Use `examples/slide_prompt.example.md` as the quality bar for a mechanism/concept slide and `examples/slide_prompt_with_asset.example.md` when a strict source figure is involved.
+Read `docs/source-grounding.md`, `docs/image-generation.md`, `docs/prompting.md`, and `docs/text-repairability.md`. Use `examples/slide_prompt.example.md` as the quality bar for a mechanism/concept slide and `examples/slide_prompt_with_asset.example.md` when a strict source figure is involved.
 
 For each remaining slide:
 
-1. create/update `prompts/slide_XX.md`;
-2. generate the full slide with native ImageGen/image editing;
-3. inspect the result immediately;
-4. classify it in `deck_state.json` as `accepted`, `needs_repair`, or `needs_regeneration`;
-5. repair/regenerate before moving on when the failure is material.
+1. create/update a **complete pre-generation** `prompts/slide_XX.md` execution brief;
+2. confirm slide identity, source/content locks, sample/reference roles, and hard constraints;
+3. make exactly one native ImageGen/image-editing call for that slide;
+4. inspect the result immediately;
+5. classify it in `deck_state.json` as `accepted`, `accepted_with_waiver`, `needs_repair`, `needs_regeneration`, or `needs_user_decision`;
+6. follow the retry budget in `docs/image-generation.md`; after the default initial attempt plus up to two corrective attempts, stop looping and ask for user direction when the same material failure persists;
+7. append a compact attempt log to the prompt file; do not replace the original generation brief.
 
-Each slide prompt must follow the self-contained structure in `docs/prompting.md`, including canvas, deck goal/audience, slide role/intent, only the necessary background context, approved sample anchor, selected detailed style reference, exact visible text, semantic relationships, composition, input-image roles/fidelity, text repairability, hard constraints, negative constraints, and acceptance criteria.
+Each slide prompt must follow the self-contained structure in `docs/prompting.md`, including canvas/slide identity, deck goal/audience, slide role/intent, only the necessary background context, source anchors/content locks, approved sample anchor, selected detailed style reference, exact visible text, semantic relationships, composition, input-image roles/fidelity, text repairability, hard constraints, negative constraints, and acceptance criteria. For post-sample slides, explicitly mark the sample as **style reference only** and forbid copying its page-specific text, exact layout, or scenic footer.
 
 ### Style consistency priority
 
@@ -239,7 +247,7 @@ The approved sample is authoritative for visual language. `visual_spec.md` is au
 
 ## Phase 5 — QA and repair
 
-Read `docs/qa-and-assembly.md` and `docs/text-repairability.md`.
+Read `docs/source-grounding.md`, `docs/qa-and-assembly.md`, and `docs/text-repairability.md`.
 
 Inspect every slide for:
 
@@ -256,13 +264,15 @@ Inspect every slide for:
 - **no text/graphic overlap or connector crossings**;
 - alignment with the approved outline.
 
-### Repair policy
+### Repair and acceptance policy
 
-- Localized text or small visual defect → use ImageGen editing first.
-- Broad content error, failed hierarchy, major constraint violation, or unusable text layout → regenerate the slide.
-- If a minor text rendering imperfection remains but the text region is safely coverable, it may be accepted only when the user explicitly accepts it or when the task is clearly a visual-draft-only workflow. Record the limitation in slide notes/state.
+- Localized visual defect → use ImageGen editing first.
+- Wrong slide identity, source/factual error, failed hierarchy, major constraint violation, or broadly unusable text layout → regenerate the slide.
+- A generic instruction such as “skip minor issues” may reduce retry depth for minor visual defects, but does **not** waive wrong names, numbers, formal terms, source meaning, missing required content, unreadable critical text, or wrong slide identity.
+- If the user explicitly accepts a specific remaining minor defect, record it in `waivers` and use `accepted_with_waiver`, not plain `accepted`.
+- Run a deck-level QA pass for repeated-layout monotony, overused scenic motifs, style drift, accidental page numbers/footers, content duplication, and cross-slide name/number inconsistencies.
 
-Do not proceed to final assembly while any expected slide is not `accepted`.
+Do not proceed to final assembly while any expected slide is outside `accepted` / `accepted_with_waiver`.
 
 ## Phase 6 — Speaker notes and PPTX assembly
 
@@ -286,7 +296,7 @@ Assemble the final deck using a presentation capability that can place accepted 
 node scripts/assemble_ppt.cjs --project /path/to/{deck_name} --output /path/to/{deck_name}/{deck_name}.pptx
 ```
 
-Before assembly, run the lightweight project validator when the runtime can execute it:
+Before assembly, run the project validator when the runtime can execute it. It checks state consistency, final PNG integrity/aspect ratio, prompt completeness, placeholders, source-grounding markers, and waiver semantics:
 
 ```bash
 node scripts/validate_project.cjs --project /path/to/{deck_name}
@@ -311,7 +321,9 @@ Update `deck_state.json` with final output information.
 - whether this is an interactive run or explicitly requested automated test run;
 - which gates have been approved;
 - which sample is the single primary visual anchor;
-- what state each slide is in;
+- what state each slide is in, including attempts/issues/waivers/source refs;
+- whether source grounding/content locks were applied;
+- the requested GitHub ref and resolved commit snapshot;
 - where the final output is.
 
 Do not use additional queue, dispatch, worker, backend, or per-tool state files.
@@ -349,7 +361,8 @@ A completed deck should contain:
 - approved `outline.md`;
 - approved `visual_spec.md`;
 - final `origin_image/slide_XX.png` images;
-- `deck_state.json` with every expected slide marked `accepted`;
+- complete pre-generation `prompts/slide_XX.md` briefs with attempt logs;
+- `deck_state.json` with every expected slide marked `accepted` or explicitly `accepted_with_waiver`;
 - `speech.md` when speaker notes are included;
 - final `.pptx`.
 
@@ -359,7 +372,7 @@ The final response should state:
 - that the deck is image-based and generated as full-slide ImageGen artwork;
 - whether speaker notes were embedded;
 - whether approvals were interactive or auto-test;
-- any unresolved limitations, especially text rendering issues;
+- any unresolved limitations, including every accepted-with-waiver slide and its explicit waiver;
 - links to the final PPTX and, when useful, the project ZIP.
 
 ## Reference Map
@@ -368,7 +381,8 @@ The final response should state:
 - `skill-manifest.json` — machine-readable version and progressive-loading map.
 - `docs/transient-loading.md` — GitHub loading, session-freeze, ref-pinning, and reload behavior.
 - `docs/workflow-gates.md` — approval points and resume behavior.
-- `docs/outline-style-sample.md` — narrative outline, style choice, sample selection.
+- `docs/source-grounding.md` — verbatim/semantic content locks, source anchors, and source-fidelity QA.
+- `docs/outline-style-sample.md` — generation-ready narrative outline, style choice, sample selection/preflight.
 - `docs/image-generation.md` — full-slide native ImageGen, sample anchoring, prompt inheritance, repair strategy.
 - `docs/prompting.md` — self-contained slide-prompt anatomy adapted from upstream prompt-generation logic.
 - `docs/upstream-adaptation.md` — audit of what was retained, adapted, or intentionally removed from the upstream Codex skill.
