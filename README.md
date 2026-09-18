@@ -6,11 +6,23 @@ The recommended deployment model is **GitHub persistence + transient loading per
 
 ## Quick start in Chat
 
-Host this repository on GitHub, then start a new Chat with:
+### Preferred: GitHub connector
+
+When the GitHub connector is available, use the repository directly:
+
+> @GitHub Load `zycdev/chatgpt-ppt-skill` from `main`, read `CHATGPT.md`, and follow that skill for the current PPT task. Then create a presentation from the attached material.
+
+This works for private repositories when the connector has been granted access.
+
+For important work, pin the task to a commit SHA (or a release tag when available) instead of following a mutable `main` branch.
+
+### Fallback: raw GitHub URL
+
+For public repositories, or when connector access is unavailable, a raw URL may be used:
 
 > Load and follow this ChatGPT PPT skill for the current task: `https://raw.githubusercontent.com/<owner>/<repo>/<ref>/CHATGPT.md`. Then create a presentation from the attached material.
 
-For important work, pin `<ref>` to a release tag or commit. `main` is convenient for development, but the skill freezes the initially loaded snapshot for the current deck and should not silently refresh it mid-task.
+A private repository should normally use the GitHub connector rather than a raw unauthenticated URL.
 
 ## What gets loaded
 
