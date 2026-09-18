@@ -10,6 +10,7 @@ This release incorporates findings from the first complete ordinary-Chat cold-st
 - Made saved `outline.md` generation-ready instead of allowing titles-only outlines for source-heavy decks.
 - Made `prompts/slide_XX.md` true **pre-generation execution briefs**; retrospective three-line summaries are no longer valid prompts.
 - Added a strict slide-identity guard and one-slide-per-ImageGen-call rule to reduce accidental cover-page generation and batch-prompt leakage.
+- Preserved selected-style avoid/rendering constraints in the normalized visual spec; intentional exceptions must be explicit user-approved overrides.
 - Added explicit placeholder/invention guards for `XXX`, `TBD`, fake citations, fake institutions, unsupported numbers, and other template filler.
 - Clarified that the approved sample is a **style reference only** for later pages: inherit visual grammar, not sample text, exact layout, scenic footer, or page-specific decoration.
 - Added a default retry budget (initial attempt + up to two corrective attempts), then `needs_user_decision` instead of open-ended retry loops.
