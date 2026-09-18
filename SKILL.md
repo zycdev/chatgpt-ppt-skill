@@ -153,7 +153,7 @@ After approval:
 
 ## Phase 2 — Define and approve the visual direction
 
-Read `references/style-catalog.md`, `docs/outline-style-sample.md`, `docs/text-repairability.md`, and `docs/style-reuse.md`.
+Read `references/style-catalog.md`, `docs/outline-style-sample.md`, `docs/text-repairability.md`, and `docs/style-reuse.md`. If built-in styles are being considered, load the full detailed `references/<style>.md` files for the 2–3 shortlisted candidates before presenting them; after selection, keep the chosen detailed style reference as an input to `visual_spec.md` and later generation.
 
 The visual direction may come from:
 
@@ -213,7 +213,7 @@ Do not create a second independent style anchor. Additional generated assets mus
 
 ## Phase 4 — Generate the remaining slides sequentially
 
-Read `docs/image-generation.md` and `docs/text-repairability.md`.
+Read `docs/image-generation.md`, `docs/prompting.md`, and `docs/text-repairability.md`. Use `examples/slide_prompt.example.md` as the quality bar for a mechanism/concept slide and `examples/slide_prompt_with_asset.example.md` when a strict source figure is involved.
 
 For each remaining slide:
 
@@ -223,18 +223,7 @@ For each remaining slide:
 4. classify it in `deck_state.json` as `accepted`, `needs_repair`, or `needs_regeneration`;
 5. repair/regenerate before moving on when the failure is material.
 
-Each slide prompt must contain:
-
-- slide role and title;
-- exact factual content that must be preserved;
-- composition guidance;
-- required assets;
-- explicit instruction to follow the approved sample's visual language;
-- 16:9 full-slide requirement;
-- text-density and legibility constraints;
-- the text-repairability block;
-- hard constraints copied from `visual_spec.md`;
-- negative constraints copied from `visual_spec.md`.
+Each slide prompt must follow the self-contained structure in `docs/prompting.md`, including canvas, deck goal/audience, slide role/intent, only the necessary background context, approved sample anchor, selected detailed style reference, exact visible text, semantic relationships, composition, input-image roles/fidelity, text repairability, hard constraints, negative constraints, and acceptance criteria.
 
 ### Style consistency priority
 
@@ -296,7 +285,13 @@ Assemble the final deck using a presentation capability that can place accepted 
 node scripts/assemble_ppt.cjs --project /path/to/{deck_name} --output /path/to/{deck_name}/{deck_name}.pptx
 ```
 
-Validate:
+Before assembly, run the lightweight project validator when the runtime can execute it:
+
+```bash
+node scripts/validate_project.cjs --project /path/to/{deck_name}
+```
+
+Then validate:
 
 - the PPTX exists and opens;
 - slide count matches accepted slide images;
@@ -374,12 +369,18 @@ The final response should state:
 - `docs/workflow-gates.md` — approval points and resume behavior.
 - `docs/outline-style-sample.md` — narrative outline, style choice, sample selection.
 - `docs/image-generation.md` — full-slide native ImageGen, sample anchoring, prompt inheritance, repair strategy.
+- `docs/prompting.md` — self-contained slide-prompt anatomy adapted from upstream prompt-generation logic.
+- `docs/upstream-adaptation.md` — audit of what was retained, adapted, or intentionally removed from the upstream Codex skill.
 - `docs/text-repairability.md` — global solid-background, margin, and overlay-safe text-zone rules.
 - `docs/assets-and-files.md` — source assets and fidelity rules.
 - `docs/qa-and-assembly.md` — QA, notes, and image-based PPTX assembly.
 - `docs/style-reuse.md` — style-source and reuse policy.
-- `references/style-catalog.md` — built-in visual directions.
+- `references/style-catalog.md` — index of the restored detailed built-in style library.
+- `references/*.md` (named style files) — full built-in style briefs inherited/adapted from upstream; load selected candidates on demand.
 - `references/deck_state.schema.json` — single-state-file schema.
 - `examples/deck_state.example.json` — example state.
 - `examples/visual_spec.example.md` — required visual-spec structure.
-- `examples/slide_prompt.example.md` — example post-sample ImageGen prompt.
+- `examples/slide_prompt.example.md` — high-quality post-sample mechanism-slide prompt.
+- `examples/slide_prompt_with_asset.example.md` — strict source-asset prompt example.
+- `scripts/validate_project.cjs` — lightweight final-state/image validation.
+- `scripts/assemble_ppt.cjs` — image-based PPTX assembly with notes.
