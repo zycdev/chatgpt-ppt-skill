@@ -28,7 +28,7 @@ If the ChatGPT platform requires an initial presentation/artifact initialization
 6. Use progressive loading: load only the supporting files required for the current phase, according to `skill-manifest.json` and the Reference Map in `SKILL.md`.
 7. Freeze this loaded skill snapshot for the current PPT task. Do not silently re-read a mutable GitHub branch midway through the task. Reload only when the user explicitly requests an update.
 8. If the user supplied a tag or commit ref, preserve that ref for all repository reads during this task.
-9. If the user supplied `main` or another mutable branch, resolve/record the current commit when practical and treat that snapshot as frozen for the task.
+9. If the user supplied `main` or another mutable branch, keep that branch name in `skill_binding.requested_ref`, resolve the current commit into `skill_binding.resolved_commit` when practical, and treat that commit snapshot as frozen for the task. Do not concatenate branch and SHA into one ambiguous field.
 10. Before first creating `deck_state.json`, load the manifest's `state_validation` resources. Then create/update `deck_state.json` with the skill binding before substantive deck production begins.
 
 ## Expected interaction
