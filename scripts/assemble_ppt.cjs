@@ -63,7 +63,7 @@ function parseSpeech(md) {
   const notes = new Map();
   if (!md || !md.trim()) return notes;
 
-  const heading = /^#{2,4}\s*(?:Slide\s*(\d+)|第\s*(\d+)\s*页)\b.*$/i;
+  const heading = /^#{2,4}\s*(?:Slide\s*(\d+)|第\s*(\d+)\s*页)\s*(?::|：|-)?\s*.*$/i;
   let current = null;
   let buf = [];
 
