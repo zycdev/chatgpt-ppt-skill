@@ -31,7 +31,8 @@
     "source_type": "built_in",
     "source_name": "科研答辩风",
     "visual_spec_path": "visual_spec.md",
-    "text_repairability_required": true
+    "text_repairability_required": true,
+    "constraint_overrides": []
   },
   "sample": {
     "slide_number": 4,
