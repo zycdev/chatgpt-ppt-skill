@@ -26,6 +26,16 @@
 
 - Preserved full-slide native ImageGen, three approval gates, single approved sample anchor, repair-safe text zones, QA/edit/regenerate, speaker notes, and image-based PPTX assembly from v0.3.
 
+### Upstream knowledge restoration
+
+- Restored all 12 detailed built-in visual style briefs from the upstream `codex-ppt-skill` instead of keeping only a shallow one-line catalog.
+- Added upstream preview links to the style catalog and made detailed style files load on demand during style selection.
+- Added `docs/prompting.md`, preserving the useful self-contained prompt anatomy and strict input-image handling from upstream `prepare_slide_prompts.py` without reintroducing Codex worker/job state.
+- Replaced the weak slide prompt example with a content-rich research mechanism example and added a strict source-figure example.
+- Expanded source-asset fidelity, style extraction, and sample-selection guidance from upstream docs.
+- Strengthened `scripts/assemble_ppt.cjs` with contiguous slide validation and broader speaker-note heading support; added `scripts/validate_project.cjs` for lightweight final-state validation.
+- Added `docs/upstream-adaptation.md` to document which upstream scripts were retained, adapted, or intentionally omitted.
+
 ## v0.3.0
 
 ### Full-slide ImageGen execution contract
