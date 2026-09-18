@@ -6,18 +6,46 @@ This document preserves the useful planning and style-selection discipline from 
 
 Transform source material into a presentation narrative rather than copying the document structure.
 
+For source-driven decks, read `docs/source-grounding.md` before drafting the outline.
+
 For each slide define:
 
 - slide number;
 - slide role and intent;
 - proposed title;
 - 2–4 core messages;
+- **locked text / exact names / numbers that must not drift**;
+- source anchors for important claims when source material exists;
 - intended visual structure;
 - required source assets, if any, with role and fidelity level.
 
 Useful slide roles include cover, context/problem, research question, concept explanation, process, comparison, timeline, architecture, evidence/results, case study, summary, and closing.
 
-If a slide requires a source image, record that mapping in the outline clearly enough for the user to verify it before generation.
+### Saved outline must be generation-ready
+
+The user-facing outline can be compact, but the saved approved `outline.md` must contain enough information to generate and audit every slide.
+
+Do **not** reduce a source-heavy deck to a titles-only outline.
+
+A useful slide entry looks like:
+
+```markdown
+### Slide N — <title>
+Role / intent: …
+Core messages:
+- …
+Locked text:
+- [verbatim] …
+- [semantic] …
+Source anchors:
+- …
+Visual structure:
+- …
+Required assets:
+- …
+```
+
+If a slide requires a source image, record that mapping clearly enough for the user to verify it before generation.
 
 Present the outline to the user and wait for approval.
 
@@ -71,12 +99,15 @@ The approved `visual_spec.md` should explicitly capture:
 - diagram/illustration language;
 - chart/figure/image treatment;
 - recurring motifs;
+- **motif reuse rule** — recurring scenery/icons/decor should be selective, not mandatory furniture on most slides;
 - source-asset treatment;
 - text repairability;
 - hard constraints;
 - negative constraints.
 
 Treat the selected detailed reference as a **style system**, not a rigid template. Keep visual identity stable while varying composition according to slide role.
+
+A sample may establish a scenic footer, robot icon, colored header bar, or other motif, but later pages should inherit the visual grammar rather than mechanically repeating that motif on every page.
 
 ## Representative sample
 
@@ -95,10 +126,26 @@ Generate exactly one sample after outline and visual direction approval.
 
 Save it directly as the intended final page, e.g. `origin_image/slide_04.png`, rather than creating a disposable sample filename.
 
+### Sample preflight before showing the user
+
+Before presenting the sample for approval, inspect it against the same hard constraints that will govern the deck:
+
+- exact locked text and factual content;
+- no invented names/numbers/citations;
+- correct slide identity;
+- no page number unless explicitly requested;
+- text-repairability, including title/header bands;
+- no prohibited imagery;
+- no obvious layout failure.
+
+If the sample fails a hard constraint, repair/regenerate it before asking the user to approve the visual direction.
+
+Style approval does not silently convert a known hard-constraint failure into an accepted exception.
+
 Ask the user to judge:
 
 - overall visual identity;
-- typography and Chinese text quality;
+- typography and text quality;
 - density and whitespace;
 - diagram/illustration language;
 - text repairability;
@@ -106,4 +153,4 @@ Ask the user to judge:
 
 If revisions are requested, revise/regenerate the same sample page until approved.
 
-Once approved, the sample becomes the single primary visual anchor for the rest of the deck. Later pages should inherit its palette, typography mood, density, spacing rhythm, illustration/diagram style, and finish without copying its exact layout.
+Once approved, the sample becomes the single primary visual anchor for the rest of the deck. Later pages should inherit its palette, typography mood, density, spacing rhythm, illustration/diagram style, and finish **without copying its exact layout, content, or decorative footer mechanically**.
